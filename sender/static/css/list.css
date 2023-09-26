@@ -96,7 +96,7 @@ table.send_result {
 }
 
 table.send_result th, table.send_result td {
-    padding: 10px;
+    padding: 5px;
 }
 
 table.send_result, table.send_result th, table.send_result td {
