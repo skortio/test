@@ -91,6 +91,7 @@ button[type="submit"].delete_button:hover {
 }
 
 table.send_result {
+    border-collapse: collapse;
     width: 100%;
 }
 
