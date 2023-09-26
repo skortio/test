@@ -19,11 +19,12 @@ table.secondary_interface_table {
     width: 60%;
 }
 
-table.secondary_interface_table th, secondary_interface_table td {
-    padding: 15px;
+table.secondary_interface_table th, table.secondary_interface_table td {
+    padding: 20px;
+    height: 20px;
 }
 
-table.secondary_interface_table, table.secondary_interface_table th, secondary_interface_table td {
+table.secondary_interface_table, table.secondary_interface_table th, table.secondary_interface_table td {
     border: 1px solid #ddd;
     text-align: center;
 }
@@ -95,11 +96,11 @@ table.send_result {
     width: 90%;
 }
 
-table.send_result th, send_result td {
+table.send_result th, table.send_result td {
     padding: 15px;
 }
 
-table.send_result, table.send_result th, send_result td {
+table.send_result, table.send_result th, table.send_result td {
     border: 1px solid #ddd;
     text-align: center;
 }
