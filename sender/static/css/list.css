@@ -92,7 +92,7 @@ button[type="submit"].delete_button:hover {
 
 table.send_result {
     border-collapse: collapse;
-    width: 80%;
+    width: 100%;
 }
 
 table.send_result th, table.send_result td {
