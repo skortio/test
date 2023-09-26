@@ -95,8 +95,8 @@ table.send_result {
     width: 100%;
 }
 
-table.send_result th,
-table.send_result td {
+table.send_result:th,
+table.send_result:td {
     padding: 5px;
 }
 
