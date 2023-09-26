@@ -91,7 +91,6 @@ button[type="submit"].delete_button:hover {
 }
 
 table.send_result {
-    border-collapse: collapse;
     width: 100%;
 }
 
@@ -101,7 +100,7 @@ table.send_result th, table.send_result td {
 }
 
 table.send_result, table.send_result th, table.send_result td {
-    border: 1px;
+    border: 1px solid rgba(0, 0, 0, 0.829);
     text-align: center;
 }
 
