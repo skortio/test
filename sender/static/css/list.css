@@ -101,7 +101,7 @@ table.send_result th, table.send_result td {
 }
 
 table.send_result, table.send_result th, table.send_result td {
-    border: 1px solid #ddd;
+    border: 1px;
     text-align: center;
 }
 
