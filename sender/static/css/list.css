@@ -92,12 +92,11 @@ button[type="submit"].delete_button:hover {
 
 table.send_result {
     border-collapse: collapse;
-    width: 90%;
+    width: 80%;
 }
 
 table.send_result th, table.send_result td {
     padding: 15px;
-    height: 10px;
 }
 
 table.send_result, table.send_result th, table.send_result td {
