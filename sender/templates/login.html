@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+{% load static %}
+<form action="" method="post" class="login-form">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+    {% csrf_token %}
+    <label for="id_username">Username:</label>
+    <input type="text" name="username" id="id_username">
+    <br>
+    <label for="id_password">Password :</label>
+    <input type="password" name="password" id="id_password">
+    <br>
+    <input type="submit" value="Log In">
+</form>

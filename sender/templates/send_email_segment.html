@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/send.css' %}">
+    <form enctype="multipart/form-data" method="post" action="{% url 'send_email_segment' %}" target="_blank">
+        {% csrf_token %}
+        <table id="email_tb">
+            <div class="form-group">
+                <label for="from">From Email:</label>
+                <input type="text" name="from" id="from" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="from_head">From Name:</label>
+                <input type="text" name="from_head" id="from_head" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="subject">Subject:</label>
+                <input type="text" name="subject" id="subject" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="content_title">Content Title:</label>
+                <input type="text" name="content_title" id="content_title" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="html_file">HTML File:</label>
+                <input type="file" accept='.html' name="html_file" id="html_file" class="form-control-file" />
+            </div>
+            <div class="form-group">
+                <label for="start_time">Start Time:</label>
+                <input type="datetime-local" name="start_time" id="start_time" class="form-control" />
+            </div>
+            <br />
+            <h3>Send to:</h3>
+            <input type="text" list="seglist" placeholder="choose a segment" name="select1">
+            <datalist id="seglist">
+                <option value=""></option>
+                {% for t in segments %}
+                <option value={{t.id}}>{{t.name}}</option>
+                {% endfor %}
+            </datalist>
+            <h3>Not send to:</h3>
+            <input type="text" list="notseglist" placeholder="choose a segment" name="select2">
+            <datalist id="notseglist">
+                <option value=""></option>
+                {% for t in segments %}
+                <option value={{t.id}}>{{t.name}}</option>
+                {% endfor %}
+            </datalist>
+            <br /><br/><br/>
+        </table>
+        <input type="submit" value="Send Email By Segment" />
+    </form>
+</div>
+{% endblock %}

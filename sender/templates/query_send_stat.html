@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/list.css' %}">
+    <form method="post" action="{% url 'query_send_stat' %}" target="_blank">
+        {% csrf_token %}
+        <b>SendId:</b>
+        <input type="number" name="send_id" id="send_id" required  class="input_number_summary"/>
+        <input type="submit" value="Query Send Stat" />
+    </form>
+</div>
+{% endblock %}
+
+

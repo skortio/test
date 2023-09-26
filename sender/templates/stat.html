@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+    <td> Use seconds : {{use_time_sec}}</td>
+    <td> User count : {{user_count}}</td>
+    <br />
+    <table border="1">
+    {% if user_info %}
+    <tr>
+        <th>user_id</th>
+        <th>opened</th>
+        <th>clicked</th>
+    </tr>
+    {% for t in emails %}
+    <tr>
+        <td>{{t.user_id}}</td>
+        <td>{{t.opened}}</td>
+        <td>{{t.clicked}}</td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+    </table>
+    
+</div>
+{% endblock %}

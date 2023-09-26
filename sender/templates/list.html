@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/list.css' %}">
+    <b> Use seconds : {{use_time_sec}}</b>
+    <b> User count : {{user_count}}</b>
+    <br />
+    {% if emails %}
+    <table border="1" class="secondary_interface_table">
+        <tr>
+            <th>user_id</th>
+            <th>level</th>
+            <th>vip_level</th>
+            <th>total_purchase</th>
+            <th>last_active_time</th>
+            <th>pkg_from</th>
+            <th>pkg_id</th>
+        </tr>
+        {% for t in emails %}
+        <tr>
+            <td>{{t.user_id}}</td>
+            <td>{{t.level}}</td>
+            <td>{{t.vip_level}}</td>
+            <td>{{t.total_purchase}}</td>
+            <td>{{t.last_active_time}}</td>
+            <td>{{t.pkg_from}}</td>
+            <td>{{t.pkg_id}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+    {% if csv_mails %}
+    <table border="1" class="secondary_interface_table">
+        <tr>
+            <th>user_id</th>
+        </tr>
+        {% for t in csv_mails %}
+        <tr>
+            <td>{{t}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+    {% if sending %}
+    <b> Sending List is:</b>
+    <table border="1" class="secondary_interface_table">
+        <tr>
+            <th>from_email</th>
+            <th>content_title</th>
+            <th>conditions</th>
+            <th>exception</th>
+            <th>start_ts</th>
+        </tr>
+        {% for t in sending %}
+        <tr>
+            <td>{{t.from_email}}</td>
+            <td>{{t.content_title}}</td>
+            <td>{{t.conditions}}</td>
+            <td>{{t.exception}}</td>
+            <td>{{t.start_ts}}</td>
+            <td style="width:100px;overflow:hidden;white-space:nowrap;">
+                <form action="{% url 'show_sending' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ t.id }}">
+                    <input type="submit" value="show">
+                </form>
+            </td>
+            <td style="width:100px;overflow:hidden;white-space:nowrap;">
+                <form action="{% url 'delete_sending' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ t.id }}">
+                    <input type="submit" value="delete" class="delete_button">
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+    {% endif %}
+
+    {% if send_result %}
+    <b> Send Result is:</b>
+    <div>
+        <form action="{% url 'get_send_result_by_ct' %}" method="post">
+            {% csrf_token %}
+            <input type="text" name="content_title">
+            <input type="submit" value="search">
+        </form>
+    </div>
+    <table border="1" class="send_result_table">
+        <tr>
+            <th>send_id</th>
+            <th>content_title</th>
+            <th>status</th>
+            <th>sent</th>
+            <th>delivery</th>
+            <th>bounce</th>
+            <th>opened</th>
+            <th>clicked</th>
+            <th>start_ts</th>
+            <th>finish_ts</th>
+            <th>last_update_ts</th>
+        </tr>
+        {% for t in send_result %}
+        <tr>
+            <td>{{t.send_id}}</td>
+            <td>{{t.content_title}}</td>
+            <td>{{t.status}}</td>
+            <td>{{t.sent}}</td>
+            <td>{{t.delivery}}</td>
+            <td>{{t.bounce}}</td>
+            <td>{{t.opened}}</td>
+            <td>{{t.clicked}}</td>
+            <td>{{t.start_ts}}</td>
+            <td>{{t.finish_ts}}</td>
+            <td>{{t.last_update_ts}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+
+    {% if unsub_users %}
+    <b>Unsubscribe users are:</b>
+    <div>
+        <form action="{% url 'get_unsub_user_by_id' %}" method="post">
+            {% csrf_token %}
+            <input type="text" name="user_id">
+            <input type="submit" value="search">
+        </form>
+    </div>
+    <div>
+        <form action="{% url 'unsub_users_to_csv' %}" method="post">
+            {% csrf_token %}
+            转为csv文件：<input type="submit" value="export">
+        </form>
+    </div>
+    <table border="1" class="secondary_interface_table">
+        <tr>
+            <th>user_id</th>
+            <th>email</th>
+            <th>reason</th>
+        </tr>
+        {% for t in unsub_users %}
+        <tr>
+            <td>{{t.user_id}}</td>
+            <td>{{t.email}}</td>
+            <td>{{t.reason}}</td>
+            <td style="width:100px;overflow:hidden;white-space:nowrap;">
+                <form action="{% url 'delete_unsub_users' %}" method="post">
+                {% csrf_token %}
+                    <input type="hidden" name="email" value="{{ t.email }}">
+                    <input type="submit" value="delete" class="delete_button">
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+    {% if csv_users %}
+    <b>Csv users are:</b>
+    <table border="1" class="secondary_interface_table">
+        <tr>
+            <th>user_id</th>
+            <th>email</th>
+        </tr>
+        {% for t in csv_users %}
+        <tr>
+            <td>{{t.user_id}}</td>
+            <td>{{t.email}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+    {% if summary %}
+    <table border="1" class="secondary_interface_table">
+        <tr>
+            <th>user_id</th>
+            <th>email</th>
+            <th>level</th>
+            <th>vip_level</th>
+            <th>total_purchase</th>
+            <th>last_active_time</th>
+            <th>pkg_from</th>
+            <th>pkg_id</th>
+            <th>facebook_name</th>
+        </tr>
+        <tr>
+            <td>{{summary.uid}}</td>
+            <td>{{summary.email}}</td>
+            <td>{{summary.level}}</td>
+            <td>{{summary.vip_level}}</td>
+            <td>{{summary.total_purchase}}</td>
+            <td>{{summary.last_active_time}}</td>
+            <td>{{summary.pkg_from}}</td>
+            <td>{{summary.pkg_id}}</td>
+            <td>{{summary.facebook_name}}</td>
+        </tr>
+    </table>
+    {% endif %}
+</div>
+{% endblock %}
+

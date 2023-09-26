@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/list.css' %}">
+    <div>
+        <form method="post" action="{% url 'query_send_info' %}" target="_blank">
+            {% csrf_token %}
+            <h3>Send info:</h3>
+            <input type="submit" value="Query Send Info" />
+        </form>
+    </div>
+    <div>
+        <br/><br/>
+        <form method="post" action="{% url 'query_unsub_users' %}" target="_blank">
+            {% csrf_token %}
+            <h3>Click the button below to query all unsubscribe users:</h3>
+            <input type="submit" value="Query All Unsubscribe Users" />
+        </form>
+    </div>
+    <div>
+        <br/><br/>
+        <form method="post" action="{% url 'query_csv_users' %}" target="_blank">
+            {% csrf_token %}
+            <h3>Click the button below to query csv users:</h3>
+            <input type="submit" value="Query Csv Users" />
+        </form>
+    </div>
+    <div>
+        <br/><br/>
+        <form method="post" action="{% url 'query_user_summary' %}" target="_blank">
+            {% csrf_token %}
+            <h3>Query user summary by user id:</h3>
+            <input type="number" name="uid" required class="input_number_summary">
+            <input type="submit" value="Query User Summary">
+        </form>
+    </div>
+
+</div>
+
+
+
+{% endblock %}
+

@@ -1,0 +1,22 @@
+
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+    <ul class="main-page-links">
+        <li><a href="{% url 'send_email_html' %}">Send an Email HTML</a></li>
+        <li><a href="{% url 'send_email_batch' %}">Send Email Batch (production)</a></li>
+        <li><a href="{% url 'send_email_csv' %}">Send Email Csv (production)</a></li>
+        <li><a href="{% url 'send_email_segment' %}">Send Email Segment (production)</a></li>
+        <li><a href="{% url 'manage_segments' %}">Manage Segments</a></li>
+        <li><a href="{% url 'query_user_info' %}">Query User Info</a></li>
+        <li><a href="{% url 'query_send_info' %}">Query Send Info</a></li>
+        <li><a href="{% url 'query_send_stat' %}">Query Send Stat</a></li>
+        <li><a href="{% url 'django_ses:django_ses_stats' %}">View SES Stats</a></li>
+    </ul>
+</div>
+{% endblock %}
+~
+

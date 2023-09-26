@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div  class="container">
+    <div>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/send.css' %}">
+        <h2>Create segment with conditions or csv</h2>
+        <form enctype="multipart/form-data" method="post" action="{% url 'manage_segments' %}">
+            {% csrf_token %}
+            <h3>Conditions of Segment:</h3>
+            <label for="name">Segment Name:</label>
+            <input type="text" name="name" id="name" class="input_number_summary"/>
+            <table id="condition_tb">
+            </table>
+            <label for="csv_file">CSV File:</label>
+            <input type="file" accept='.csv' name="csv_file" id="csv_file" />
+            <br /><br />
+            <input type="submit" value="Create New Segment" />
+        </form>
+    </div>
+
+    <div>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/list.css' %}">
+        <h3>Search segments with name:</h3>
+        <form action="{% url 'manage_segments' %}" method="post">
+            {% csrf_token %}
+            <input type="text" name="seg_search" class="input_number_summary">
+            <input type="submit" value="search">
+        </form>
+        <br>
+        <h3>Available Segments:</h3>
+        {% if segments %}
+        <table border="1" class="secondary_interface_table">
+            <tr>
+                <th>segment_id</th>
+                <th>name</th>
+                <th>conditions</th>
+                <th>is_csv</th>
+                <th>gm_name</th>
+            </tr>
+            {% for t in segments %}
+            <tr>
+                <td>{{t.id}}</td>
+                <td>{{t.name}}</td>
+                <td>{{t.conditions}}</td>
+                <td>{{t.csv}}</td>
+                <td>{{t.gm_name}}</td>
+                <td style="width:100px;overflow:hidden;white-space:nowrap;">
+                    <form action="{% url 'delete_segment' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="seg_id" value="{{ t.id }}">
+                    <input type="submit" value="delete" class="delete_button">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    </div>
+    <script type="text/javascript" src="{% static 'js/create_item.js' %}">
+    </script>
+    <script type="text/javascript">
+        showItem("cs_item", 0);
+
+        initUserTable("condition", 5, 0, "condition_type_list", 0);
+    </script>
+
+</div>
+
+
+{% endblock %}
+

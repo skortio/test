@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/send.css' %}">
+        <form enctype="multipart/form-data" method="post" action="{% url 'send_email_csv' %}" target="_blank">
+            {% csrf_token %}
+            <div>
+                <label for="from">From Email:</label>
+                <input type="text" name="from" id="from" class="form-control" />
+            </div>
+            <div>
+                <label for="from_head">From Name:</label>
+                <input type="text" name="from_head" id="from_head" class="form-control" />
+            </div>
+            <div>
+                <label for="subject">Subject:</label>
+                <input type="text" name="subject" id="subject" class="form-control" />
+            </div>
+            <div>
+                <label for="content_title">Content Title:</label>
+                <input type="text" name="content_title" id="content_title" class="form-control" />
+            </div>
+
+            <div>
+                <label for="html_file">HTML File:</label>
+                <input type="file" accept='.html' name="html_file" id="html_file" class="form-control-file" />
+            </div>
+            <div>
+                <label for="csv_file">CSV File:</label>
+                <input type="file" accept='.csv' name="csv_file" id="csv_file" class="form-control-file" />
+            </div>
+
+            <div>
+                <label for="start_time">Start Time:</label>
+                <input type="datetime-local" name="start_time" id="start_time" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Send Email By Csv</button>
+        </form>
+    </div>
+{% endblock %}
+

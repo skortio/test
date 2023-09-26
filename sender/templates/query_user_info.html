@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/list.css' %}">
+    <h2>Query User By user condition</h2>
+        <form enctype="multipart/form-data" method="post" action="{% url 'query_user_info' %}" target="_blank">
+            {% csrf_token %}
+            <h3>Conditions for query:</h3>
+            <table id="user_tb">
+            </table>
+            <br />
+            <h3>Conditions for exclusion:</h3>
+            <table id="except_tb">
+            </table>
+            <br />
+            <input type="submit" value="Query User Info" />
+        </form>
+
+    <script type="text/javascript" src="{% static 'js/create_item.js' %}">
+    </script>
+    <script type="text/javascript">
+        showItem("cs_item", 0);
+
+        initUserTable("user", 5, 0, "condition_type_list", 0);
+
+        initUserTable("except", 5, 0, "except_condition", 5);
+    </script>
+</div>
+{% endblock %}
+
