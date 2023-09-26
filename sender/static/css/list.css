@@ -21,7 +21,6 @@ table.secondary_interface_table {
 
 table.secondary_interface_table th, table.secondary_interface_table td {
     padding: 15px;
-    height: 20px;
 }
 
 table.secondary_interface_table, table.secondary_interface_table th, table.secondary_interface_table td {
@@ -98,6 +97,7 @@ table.send_result {
 
 table.send_result th, table.send_result td {
     padding: 15px;
+    height: 20px;
 }
 
 table.send_result, table.send_result th, table.send_result td {
