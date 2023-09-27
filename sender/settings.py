@@ -3,8 +3,9 @@ import sys
 from pathlib import Path
 
 DEBUG = True
-# BASE_PATH = os.path.dirname(__file__)
-BASE_PATH = Path(__file__).resolve().parent.parent
+BASE_PATH = os.path.dirname(__file__)
+# BASE_PATH = Path(__file__).resolve().parent.parent
+print(str(BASE_PATH) + "---------------------------------")
 
 ALLOWED_HOSTS = ["127.0.0.1"]
 SESSION_COOKIE_NAME = 'dragon-ses'
