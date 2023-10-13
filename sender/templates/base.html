@@ -7,7 +7,9 @@
         </style>
     </head>
     <body>
-        <h1>Dragon-SES Sender</h1>
+        <a href="{% url 'index' %}">
+            <h1>Dragon-SES Sender</h1>
+        </a>
         <div id="header">
             {% if user.is_authenticated %}
             Welcome,
