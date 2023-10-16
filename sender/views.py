@@ -344,7 +344,7 @@ def get_send_result_by_ct(request):
                 send_result = SendResult.objects.using(PRODUCT_RO).values("send_id", "content_title", "status",
                                                                           "delivery", "sent", "bounce", "opened",
                                                                           "clicked", "start_ts", "finish_ts",
-                                                                          "last_update_ts").all()
+                                                                          "last_update_ts").order_by('id')[:100]
             if len(send_result) > 0:
                 for r in send_result:
                     results.append({
