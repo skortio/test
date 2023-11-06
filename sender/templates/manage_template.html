@@ -37,7 +37,6 @@
         </form>
         <br>
         <h3>Available Templates:</h3>
-        {% if templates %}
         <table border="1" class="secondary_interface_table">
             <tr>
                 <th>Template_id</th>
@@ -45,7 +44,9 @@
                 <th>Group_ID</th>
                 <th>Subject</th>
                 <th>gm_name</th>
+                <th>HTML file</th>
             </tr>
+            {% if templates %}
             {% for t in segments %}
             <tr>
                 <td>{{t.id}}</td>
