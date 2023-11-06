@@ -506,4 +506,4 @@ def send_email_segment(request):
 @login_required(login_url='/login/')
 def manage_templates(request):
     ret = {}
-    return render(request, 'manage_segments.html', ret)
+    return render(request, 'manage_template.html', ret)
