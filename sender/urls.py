@@ -39,7 +39,8 @@ urlpatterns = [
     re_path(r'^unsub_users_to_csv/', views.unsub_users_to_csv, name='unsub_users_to_csv'),
     re_path(r'^manage_segments/$', views.manage_segments, name='manage_segments'),
     re_path(r'^send_email_segment/$', views.send_email_segment, name='send_email_segment'),
-    re_path(r'^delete_segment/', views.delete_segment, name='delete_segment')
+    re_path(r'^delete_segment/', views.delete_segment, name='delete_segment'),
+    re_path(r'^manage_templates/', views.manage_templates, name='manage_templates')
 ]
 
 urlpatterns += staticfiles_urlpatterns()

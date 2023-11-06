@@ -502,3 +502,8 @@ def send_email_segment(request):
         ret = query_segments()
         return render(request, 'send_email_segment.html', ret)
 
+
+@login_required(login_url='/login/')
+def manage_segments(request):
+    ret = {}
+    return render(request, 'manage_segments.html', ret)

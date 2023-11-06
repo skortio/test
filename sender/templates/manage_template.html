@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/send.css' %}">
+        <h2>Manage Email Template</h2>
+        <form enctype="multipart/form-data" method="post" action="">
+            {% csrf_token %}
+            <div>
+                <label for="template_name">Template Name:</label>
+                <input type="text" name="template_name" id="template_name">
+            </div>
+            <div>
+                <label for="text_part">Template Group ID:</label>
+                <input type="text" name="text_part" id="text_part">
+            </div>
+            <div>
+                <label for="subject">Subject:</label>
+                <input type="text" name="subject" id="subject">
+            </div>
+            <div>
+                <label for="html_part">HTML File:</label>
+                <input type="file" accept='.html' name="html_part" id="html_part" >
+            </div>
+            <input type="submit" value="Create New Template" />
+        </form>
+    </div>
+
+    <div>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/list.css' %}">
+        <h3>Search Template with name:</h3>
+        <form action="" method="post">
+            {% csrf_token %}
+            <input type="text" name="seg_search" class="input_number_summary">
+            <input type="submit" value="search">
+        </form>
+        <br>
+        <h3>Available Templates:</h3>
+        {% if templates %}
+        <table border="1" class="secondary_interface_table">
+            <tr>
+                <th>Template_id</th>
+                <th>Name</th>
+                <th>Group_ID</th>
+                <th>Subject</th>
+                <th>gm_name</th>
+            </tr>
+            {% for t in segments %}
+            <tr>
+                <td>{{t.id}}</td>
+                <td>{{t.name}}</td>
+                <td>{{t.conditions}}</td>
+                <td>{{t.csv}}</td>
+                <td>{{t.gm_name}}</td>
+                <td style="width:100px;overflow:hidden;white-space:nowrap;">
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{ t.id }}">
+                        <input type="submit" value="show">
+                    </form>
+                </td>
+                <td style="width:100px;overflow:hidden;white-space:nowrap;">
+                    <form action="" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="seg_id" value="{{ t.id }}">
+                    <input type="submit" value="delete" class="delete_button">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    </div>
+</div>
+
+
+{% endblock %}
+
