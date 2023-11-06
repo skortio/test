@@ -7,22 +7,18 @@
         <h2>Manage Email Template</h2>
         <form enctype="multipart/form-data" method="post" action="">
             {% csrf_token %}
-            <div>
-                <label for="template_name">Template Name:</label>
-                <input type="text" name="template_name" id="template_name">
-            </div>
-            <div>
-                <label for="text_part">Template Group ID:</label>
-                <input type="text" name="text_part" id="text_part">
-            </div>
-            <div>
-                <label for="subject">Subject:</label>
-                <input type="text" name="subject" id="subject">
-            </div>
-            <div>
-                <label for="html_part">HTML File:</label>
-                <input type="file" accept='.html' name="html_part" id="html_part" >
-            </div>
+            <label for="template_name">Template Name:</label>
+            <input type="text" name="template_name" id="template_name">
+            <br>
+            <label for="text_part">Template Group ID:</label>
+            <input type="text" name="text_part" id="text_part">
+            <br>
+            <label for="subject">Subject:</label>
+            <input type="text" name="subject" id="subject">
+            <br>
+            <label for="html_part">HTML File:</label>
+            <input type="file" accept='.html' name="html_part" id="html_part" >
+            <br>
             <input type="submit" value="Create New Template" />
         </form>
     </div>
