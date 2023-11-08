@@ -1,3 +1,4 @@
+import datetime
 import time
 import csv
 import io
@@ -12,10 +13,13 @@ from django.db.models import Q
 
 #from django.shortcuts import render, HttpResponse
 from django.contrib.auth import authenticate, login, logout
+from jinja2 import Template
+
 from sender.models import UserSummary, UnsubscribeUsers, Segment
 from .mail_collector import *
 from .models import SendResult
 from .send_manager import to_str
+from .ses_template import create_ses_template, get_ses_template, update_ses_template, delete_ses_template
 from .timer_manager import start_timer
 
 # start_timer()
@@ -505,5 +509,111 @@ def send_email_segment(request):
 
 @login_required(login_url='/login/')
 def manage_templates(request):
-    ret = {}
+    ret = query_manage_template()
+    return render(request, 'manage_template.html', ret)
+
+
+@login_required(login_url='/login/')
+def create_template(request):
+    if request.method == "POST":
+        template_name = request.POST.get('template_name', '')
+        if template_name:
+            gm_name = request.user.get_username()
+            template_type = request.POST.get('template_type', '')
+            subject_part = request.POST.get('subject','')
+            html_part = request.FILES.get('html_part', None)
+            if html_part:
+                create_ts = datetime.datetime.now()
+                send = SesTemplate(template_name=template_name,template_type=template_type,subject_part=subject_part,gm_name=gm_name,create_ts=create_ts,last_update_ts=create_ts)
+                send.save(using=PRODUCT)
+                create_ses_template(template_name, subject_part, template_type, html_part)
+            ret = query_manage_template(template_name)
+        else:
+            ret = query_manage_template()
+    else:
+        ret = query_manage_template()
+    return render(request, 'manage_template.html', ret)
+
+
+@login_required(login_url='/login/')
+def search_template(request):
+    if request.method == "POST":
+        template_name = request.POST.get('template_name', '')
+        if template_name:
+            ret = query_manage_template(template_name)
+        else:
+            ret = query_manage_template()
+    else:
+        ret = query_manage_template()
+    return render(request, 'manage_template.html', ret)
+
+
+@login_required(login_url='/login/')
+def show_html(request):
+    if request.method == "POST":
+        template_name = request.POST.get('template_name', '')
+        response = get_ses_template(template_name)
+        template_data = response['Template']
+
+        # 定义渲染模板所需的数据
+        context = {
+            'subject': template_data['SubjectPart'],
+            'html': template_data['HtmlPart'],
+        }
+
+        # 加载并渲染模板
+        jinja_template = Template("""
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>{{ subject }}</title>
+        </head>
+        <body>
+          {{ html }}
+        </body>
+        </html>
+        """)
+        rendered_html = jinja_template.render(context)
+        print(rendered_html)
+
+
+@login_required(login_url='/login/')
+def edit_template(request):
+    if request.method == "POST":
+        template_name = request.POST.get('template_name', '')
+        ret = query_manage_template(template_name)
+        return render(request, 'edit_template.html', ret)
+
+
+@login_required(login_url='/login/')
+def update_template(request):
+    if request.method == "POST":
+        template_name = request.POST.get('template_name', '')
+        if template_name:
+            gm_name = request.user.get_username()
+            template_type = request.POST.get('template_type', '')
+            subject_part = request.POST.get('subject','')
+            html_part = request.FILES.get('html_part', None)
+            id = request.POST.get('id', 0)
+            if html_part:
+                create_ts = datetime.datetime.now()
+                send = SesTemplate(id=id,template_name=template_name,template_type=template_type,subject_part=subject_part,gm_name=gm_name,create_ts=create_ts,last_update_ts=create_ts)
+                send.save(using=PRODUCT)
+                update_ses_template(template_name, subject_part, template_type, html_part)
+            ret = query_manage_template(template_name)
+        else:
+            ret = query_manage_template()
+    else:
+        ret = query_manage_template()
+    return render(request, 'manage_template.html', ret)
+
+
+@login_required(login_url='/login/')
+def delete_template(request):
+    if request.method == "POST":
+        template_name = request.POST.get('template_name', '')
+        if template_name:
+            delete_ses_template(template_name)
+            SesTemplate.object.using(PRODUCT).filter(template_name=template_name).delete()
+    ret = query_manage_template()
     return render(request, 'manage_template.html', ret)

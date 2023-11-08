@@ -180,3 +180,20 @@ class Segment(models.Model):
 
     def __str__(self):
         return ''
+
+
+class SesTemplate(models.Model):
+    id = models.IntegerField(primary_key=True)
+    template_name = models.CharField(max_length=128, unique=True)
+    subject_part = models.CharField(max_length=256)
+    template_type = models.IntegerField()
+    create_ts = models.DateTimeField(default=datetime.now)
+    last_update_ts = models.DateTimeField(default=datetime.now)
+    gm_name = models.CharField(max_length=32)
+
+    class Meta:
+        verbose_name = 'Ses Html Template'
+        db_table = 'ses_template'
+
+    def __str__(self):
+        return ''

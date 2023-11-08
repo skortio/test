@@ -2,10 +2,11 @@
 {% load static %}
 {% block content %}
 <div class="container">
+    <h2>Manage Email Template</h2>
     <div>
         <link rel="stylesheet" type="text/css" href="{% static 'css/send.css' %}">
-        <h2>Manage Email Template</h2>
-        <form enctype="multipart/form-data" method="post" action="">
+        <h3>Create Template</h3>
+        <form enctype="multipart/form-data" method="post" action="{% url 'create_template' %}">
             {% csrf_token %}
             <div>
                 <label for="template_name">Template Name:</label>
@@ -30,13 +31,14 @@
     <div>
         <link rel="stylesheet" type="text/css" href="{% static 'css/list.css' %}">
         <h3>Search Template with name:</h3>
-        <form action="" method="post">
+        <form action="{% url 'search_template' %}" method="post">
             {% csrf_token %}
             <input type="text" name="seg_search" class="input_number_summary">
             <input type="submit" value="search">
         </form>
         <br>
         <h3>Available Templates:</h3>
+        {% if templates %}
         <table border="1" class="secondary_interface_table">
             <tr>
                 <th>Template_id</th>
@@ -44,27 +46,37 @@
                 <th>Group_ID</th>
                 <th>Subject</th>
                 <th>gm_name</th>
+                <th>create_ts</th>
+                <th>last_update_ts</th>
                 <th>HTML file</th>
             </tr>
-            {% if templates %}
-            {% for t in segments %}
+            {% for t in templates %}
             <tr>
                 <td>{{t.id}}</td>
-                <td>{{t.name}}</td>
-                <td>{{t.conditions}}</td>
-                <td>{{t.csv}}</td>
+                <td>{{t.template_name}}</td>
+                <td>{{t.template_type}}</td>
+                <td>{{t.subject_part}}</td>
                 <td>{{t.gm_name}}</td>
+                <td>{{t.create_ts}}</td>
+                <td>{{t.last_update_ts}}</td>
                 <td style="width:100px;overflow:hidden;white-space:nowrap;">
-                    <form method="post" action="">
+                    <form method="post" action="{% url 'show_html' %}" target="_blank">
                         {% csrf_token %}
-                        <input type="hidden" name="id" value="{{ t.id }}">
+                        <input type="hidden" name="template_name" value="{{ t.template_name }}">
                         <input type="submit" value="show">
                     </form>
                 </td>
                 <td style="width:100px;overflow:hidden;white-space:nowrap;">
-                    <form action="" method="post">
+                    <form method="post" action="{% url 'edit_template' %}" target="_blank">
+                        {% csrf_token %}
+                        <input type="hidden" name="template_name" value="{{ t.template_name }}">
+                        <input type="submit" value="edit">
+                    </form>
+                </td>
+                <td style="width:100px;overflow:hidden;white-space:nowrap;">
+                    <form action="{% url 'delete_template' %}" method="post">
                     {% csrf_token %}
-                    <input type="hidden" name="seg_id" value="{{ t.id }}">
+                    <input type="hidden" name="template_name" value="{{ t.template_name }}">
                     <input type="submit" value="delete" class="delete_button">
                     </form>
                 </td>

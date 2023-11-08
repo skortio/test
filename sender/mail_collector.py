@@ -553,3 +553,25 @@ def query_summary_by_id(uid):
 
     return summary
 
+
+def query_manage_template(template_name=''):
+    if template_name:
+        manage_template = SesTemplate.objects.using(PRODUCT_RO).filter(template_name=template_name)
+    else:
+        manage_template = SesTemplate.objects.using(PRODUCT_RO).all()
+    manage_template_list = []
+    for u in manage_template:
+        manage_template_list.append({
+            'id': u.id,
+            'template_name': u.template_name,
+            'subject_part': u.subject_part,
+            'template_type': u.template_type,
+            'gm_name': u.gm_name,
+            'create_ts': u.create_ts,
+            'last_update_ts': u.last_update_ts
+        })
+    ret = {
+        'templates': manage_template_list,
+    }
+    return ret
+

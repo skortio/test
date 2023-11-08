@@ -40,7 +40,13 @@ urlpatterns = [
     re_path(r'^manage_segments/$', views.manage_segments, name='manage_segments'),
     re_path(r'^send_email_segment/$', views.send_email_segment, name='send_email_segment'),
     re_path(r'^delete_segment/', views.delete_segment, name='delete_segment'),
-    re_path(r'^manage_templates/', views.manage_templates, name='manage_templates')
+    re_path(r'^manage_templates/', views.manage_templates, name='manage_templates'),
+    re_path(r'^create_template/', views.create_template, name='create_template'),
+    re_path(r'^search_template/', views.search_template, name='search_template'),
+    re_path(r'^show_html/', views.show_html, name='show_html'),
+    re_path(r'^edit_template/', views.edit_template, name='edit_template'),
+    re_path(r'^update_template/', views.update_template, name='update_template'),
+    re_path(r'^delete_template/', views.delete_template, name='delete_template'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
