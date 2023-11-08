@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <h2>Edit Email Template</h2>
+    <div>
+      <link rel="stylesheet" type="text/css" href="{% static 'css/send.css' %}">
+        <h3>Edit Template</h3>
+        <form enctype="multipart/form-data" method="post" action="{% url 'update_template' %}">
+            {% csrf_token %}
+            {% if templates %}
+            {% for t in templates %}
+            <div>
+                <label for="template_name">Template Name:</label>
+                <input type="text" name="template_name" id="template_name" class="input_number_summary" value={{t.template_name}}>
+            </div>
+            <div>
+                <label for="text_part">Template Group ID:</label>
+                <input type="text" name="text_part" id="text_part" class="input_number_summary" value={{t.template_type}}>
+            </div>
+            <div>
+                <label for="subject">Subject:</label>
+                <input type="text" name="subject" id="subject" class="input_number_summary" value={{t.subject_part}}>
+            </div>
+            <div>
+                <label for="html_part">HTML File:</label>
+                <input type="file" accept='.html' name="html_part" id="html_part">
+            </div>
+            <input type="hidden" name="id" value="{{ t.id }}">
+            <input type="submit" value="Save Change">
+            {% endfor %}
+            {% endif %}
+        </form>
+    </div>
+</div>
