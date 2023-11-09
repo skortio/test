@@ -523,10 +523,10 @@ def create_template(request):
             subject_part = request.POST.get('subject','')
             html_part = request.FILES.get('html_part', None)
             if html_part:
-                create_ts = datetime.datetime.now()
+                create_ts = datetime.now()
                 send = SesTemplate(template_name=template_name,template_type=template_type,subject_part=subject_part,gm_name=gm_name,create_ts=create_ts,last_update_ts=create_ts)
                 send.save(using=PRODUCT)
-                create_ses_template(template_name, subject_part, template_type, html_part)
+                # create_ses_template(template_name, subject_part, template_type, html_part)
             ret = query_manage_template(template_name)
         else:
             ret = query_manage_template()
@@ -596,10 +596,12 @@ def update_template(request):
             html_part = request.FILES.get('html_part', None)
             id = request.POST.get('id', 0)
             if html_part:
-                create_ts = datetime.datetime.now()
-                send = SesTemplate(id=id,template_name=template_name,template_type=template_type,subject_part=subject_part,gm_name=gm_name,create_ts=create_ts,last_update_ts=create_ts)
+                last_update_time = datetime.now()
+                send = SesTemplate(id=id,template_name=template_name,template_type=template_type,subject_part=subject_part,gm_name=gm_name,last_update_ts=last_update_time)
                 send.save(using=PRODUCT)
-                update_ses_template(template_name, subject_part, template_type, html_part)
+            # else:
+            #
+            #     update_ses_template(template_name, subject_part, template_type, html_part)
             ret = query_manage_template(template_name)
         else:
             ret = query_manage_template()
@@ -613,7 +615,7 @@ def delete_template(request):
     if request.method == "POST":
         template_name = request.POST.get('template_name', '')
         if template_name:
-            delete_ses_template(template_name)
-            SesTemplate.object.using(PRODUCT).filter(template_name=template_name).delete()
+            # delete_ses_template(template_name)
+            SesTemplate.objects.using(PRODUCT).filter(template_name=template_name).delete()
     ret = query_manage_template()
     return render(request, 'manage_template.html', ret)

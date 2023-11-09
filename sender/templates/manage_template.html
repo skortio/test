@@ -13,8 +13,8 @@
                 <input type="text" name="template_name" id="template_name" class="input_number_summary">
             </div>
             <div>
-                <label for="text_part">Template Group ID:</label>
-                <input type="text" name="text_part" id="text_part" class="input_number_summary">
+                <label for="template_type">Template Group ID:</label>
+                <input type="text" name="template_type" id="template_type" class="input_number_summary">
             </div>
             <div>
                 <label for="subject">Subject:</label>
@@ -33,7 +33,7 @@
         <h3>Search Template with name:</h3>
         <form action="{% url 'search_template' %}" method="post">
             {% csrf_token %}
-            <input type="text" name="seg_search" class="input_number_summary">
+            <input type="text" name="template_name" class="input_number_summary">
             <input type="submit" value="search">
         </form>
         <br>
@@ -42,12 +42,12 @@
         <table border="1" class="secondary_interface_table">
             <tr>
                 <th>Template_id</th>
-                <th>Name</th>
-                <th>Group_ID</th>
+                <th>Template_name</th>
+                <th>Template_Group_ID</th>
                 <th>Subject</th>
-                <th>gm_name</th>
-                <th>create_ts</th>
-                <th>last_update_ts</th>
+                <th>Gm_name</th>
+                <th>Create_ts</th>
+                <th>Last_update_ts</th>
                 <th>HTML file</th>
             </tr>
             {% for t in templates %}
