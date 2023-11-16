@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="https://cdn.staticfile.org/vue/3.0.5/vue.global.js"></script>
+    </head>
+    <body>
+        <div id="count" class="test"></div>
+        <script>
+            const count = Vue.createApp({
+                data() {
+                    return { count: 4 }
+                },
+                methods:{
+                    increment(){
+                        this.count++
+                    }
+                }
+            })
+            const vm = count.mount('#count')
+            document.write(vm.$data.count)
+            document.write("<br>")
+            vm.increment()
+            document.write(vm.count)
+        </script>
+    </body>
+</html>

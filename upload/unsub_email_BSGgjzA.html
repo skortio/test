@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="en-GB">
+<head><meta name="ROBOTS" content="INDEX,FOLLOW"><meta name="keywords" content=""><meta name="description" content="">
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0 width=width-device" />
+    <title>unsubscribe - jackpotwins</title>
+    <style>
+        span {
+            font-size: 150%;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div style="text-align: center;">
+            <img src="download (4).png" alt=""  style="object-fit: contain; max-width: 380px; margin: 0 auto 32px;"/>
+        </div>
+    </div>
+
+    <div class="section" style="font-weight: 100;max-width: 380px; margin: 0 auto 30px;font-size: 80%;">
+        <form id="unsubForm" name="unsubscribeForm" method="post">
+            <table class="answer" aria-required="true">
+                <tr>
+                    <td colspan="2">
+                        <span><b style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-size: 120%;">Please leave your feedback and let us know why you unsubscribe.</b></span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="radio" id="answer_1" name="unsubOpt" style="height: 20px;width: 20px;" value="1" onchange="edit_oth_reason()">
+                    </td>
+                    <td><span><label for="answer_1" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">The Emails are too frequent.</label></span></td>
+                </tr>
+                <tr style="margin-top: 30px;">
+                    <td>
+                        <input type="radio" id="answer_2" name="unsubOpt" style="height: 20px;width: 20px;" value="2" onchange="edit_oth_reason()">
+                    </td>
+                    <td><span><label for="answer_2" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">The Emails are not helpful, I rarely read them.</label></span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="radio" id="answer_3" name="unsubOpt" style="height: 20px;width: 20px;" value="3" onchange="edit_oth_reason()">
+                    </td>
+                    <td><span><label for="answer_3" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">I did not sign up for these Emails.</label></span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="radio" id="answer_4" name="unsubOpt" style="height: 20px;width: 20px;" value="4" onchange="edit_oth_reason()">
+                    </td>
+                    <td><span><label for="answer_4" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">I have uninstalled the game.</label></span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="radio" id="answer_5" name="unsubOpt" value="OTHER" style="height: 20px;width: 20px;" onchange="edit_oth_reason()" >
+                    </td>
+                    <td><span><label for="answer_5" style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Other Reasons. </label></span></td>
+                </tr>
+                
+                <tr id="th_reason_row" style="visibility: collapse">
+                    <td colspan="2">
+                        <textarea style="width: 100%;height:50px;font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;margin: 0 auto;" name="otherText" id="otherText" maxlength="255" placeholder="Please write down your suggestions here..."></textarea>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="submit" style="text-align: center; margin-top: 30px;">
+                <input type="hidden" name="user_id" value= '10000'>
+                <input type="image" src="download (5).png" onclick="window.open(URL='Thank_you.html')" style="max-width: 37%; max-height: 20%; margin-right: 10%;" name = "ss" value="1">
+                <input type="image" src="download (7).png" onclick="myfunce_2()" style="max-width: 48%; max-height: 20%;">
+            </div>
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        function myfunce_2(){
+            window.open(URL='jump_page.html');
+            window.close();
+        }
+        function edit_oth_reason(){
+            var list = document.getElementsByName("unsubOpt")
+            if (list[4].checked){
+                var ui = document.getElementById("th_reason_row")
+                ui.style.visibility="visible"
+            }else{
+                var ui = document.getElementById("th_reason_row")
+                ui.style.visibility="collapse"
+            }
+            
+        }
+
+        
+    </script>
+
+    <script type="text/javascript" src=”https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js”>
+        $(function () {
+            $('#unsubForm').submit(function(e) {
+                var checked = $('#answer_1').prop('checked') || $('#answer_2').prop('checked') || $('#answer_3').prop('checked') || $('#answer_4').prop('checked') || $('#answer_5').prop('checked');
+                
+                if (!checked) {
+                    e.preventDefault();
+                    $('#unsubForm .answer').addClass('red');
+                }
+            });
+            
+            $('#unsubForm input:radio').change(function() {
+                $('#unsubForm .answer').removeClass('red');
+            });
+        })
+    </script>
+
+</body>
+</html>

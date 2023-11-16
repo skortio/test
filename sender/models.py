@@ -190,6 +190,7 @@ class SesTemplate(models.Model):
     create_ts = models.DateTimeField(default=datetime.now)
     last_update_ts = models.DateTimeField(default=datetime.now)
     gm_name = models.CharField(max_length=32)
+    html_str = models.TextField()
 
     class Meta:
         verbose_name = 'Ses Html Template'

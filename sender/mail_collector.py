@@ -7,12 +7,16 @@ from datetime import datetime, timedelta
 from django.core import mail
 from email.utils import formataddr
 
+from django.core.files.storage import FileSystemStorage
+from django.db.models import Q
+
 from sender.models import *
 from .mail_conf import *
 from .send_manager import SendManager
-#from asgiref.sync import sync_to_async
+# from asgiref.sync import sync_to_async
 
 import logging
+
 logger = logging.getLogger("django")
 
 
@@ -29,6 +33,7 @@ def check_user(uid, u, conditio_list, exception_list):
     exc = eval(exc_str + "True")
     final = cond if not exception_list else eval(str(cond) + " and not " + str(exc))
     return final
+
 
 def check_codition(uid, u, condition):
     now = int(time.time())
@@ -54,7 +59,7 @@ def check_codition(uid, u, condition):
     elif c[0] == 5:
         user_act_time = time.mktime(u['last_active_time'].timetuple())
         active_time = now - user_act_time
-        if active_time <  condition[1] * 3600 or (condition[2] >= 0 and active_time > condition[2] * 3600):
+        if active_time < condition[1] * 3600 or (condition[2] >= 0 and active_time > condition[2] * 3600):
             return False, logic
         else:
             pass
@@ -107,7 +112,7 @@ def query_summary(request, is_send):
             if item_type <= 0:
                 break
 
-            item_val_str = 'item_val_%d_%d' % (item_type, k+5)
+            item_val_str = 'item_val_%d_%d' % (item_type, k + 5)
             item_val_list = request.POST.getlist(item_val_str, [])
             item_val_list = to_num_list(item_val_list)
             if item_type == 15:
@@ -124,16 +129,17 @@ def query_summary(request, is_send):
     ret = {
         'use_time_sec': round(time.time() - start, 3),
         'user_count': len(emails),
-        'emails':emails
+        'emails': emails
     }
     return ret
 
 
 def get_html_from_file(file_name):
-    html_str = ''
-    file_name = "./sender/upload/%s" % file_name
-    if os.path.exists(file_name):
-        with open(file_name, 'r') as f:
+    html_str = ""
+    storage = FileSystemStorage()
+    file_path = storage.path(file_name)
+    if os.path.exists(file_path):
+        with open(file_path, "r") as f:
             html_str = f.read()
     return html_str
 
@@ -189,18 +195,21 @@ def build_sending_queue(request, conditions=None, csv_users=None, extra=None):
 
     html_template = UploadFile(title=html_file.name, path=html_file)
     html_template.save(request=request, using=PRODUCT)
-    create_sending_queue(from_email, subject, html_template.path, start_ts, content_title, conditions=conditions, csv_users=csv_users, ext=extra)
+    create_sending_queue(from_email, subject, html_template.path, start_ts, content_title, conditions=conditions,
+                         csv_users=csv_users, ext=extra)
     SendManager().update_sending()
 
 
-def create_sending_queue(from_email, subject, html_str, start_ts, content_title, conditions=None, csv_users=None, ext=None):
+def create_sending_queue(from_email, subject, html_str, start_ts, content_title, conditions=None, csv_users=None,
+                         ext=None):
     if conditions is not None:
         conditions = json.dumps(conditions)
     if csv_users is not None:
         csv_users = json.dumps(csv_users)
     if ext:
         ext = json.dumps(ext)
-    send = SendingQueue(from_email=from_email, subject=subject, html_str=html_str, start_ts=start_ts, content_title=content_title, conditions=conditions, csv_users=csv_users, ext=ext)
+    send = SendingQueue(from_email=from_email, subject=subject, html_str=html_str, start_ts=start_ts,
+                        content_title=content_title, conditions=conditions, csv_users=csv_users, ext=ext)
     send.save(using=PRODUCT)
     return send.id
 
@@ -369,6 +378,7 @@ def send_email_by_segments(send_id, from_email, subject, content_title, html_str
 
     return emails
 
+
 def query_send(request):
     start = time.time()
     SendManager().update_sending()
@@ -431,12 +441,14 @@ def query_stat(send_id):
 
     send_key = '%s_' % send_id
     send_map = {}
-    send_users = SendUserInfo.objects.using(PRODUCT_RO).filter(send_key__istartswith=send_key).values('send_key', 'opened', 'clicked').all()
+    send_users = SendUserInfo.objects.using(PRODUCT_RO).filter(send_key__istartswith=send_key).values('send_key',
+                                                                                                      'opened',
+                                                                                                      'clicked').all()
     for send in send_users:
         user_id = int(send['send_key'].split('_')[1])
         send_map[user_id] = {
-            'opened' : send['opened'],
-            'clicked' : send['clicked'],
+            'opened': send['opened'],
+            'clicked': send['clicked'],
         }
 
     user_count = 0
@@ -444,8 +456,8 @@ def query_stat(send_id):
         uid = s.user_id
         deliverys.append({
             "user_id": uid,
-            "opened": send_map.get(uid,{}).get('opened', 0),
-            "clicked": send_map.get(uid,{}).get('clicked', 0),
+            "opened": send_map.get(uid, {}).get('opened', 0),
+            "clicked": send_map.get(uid, {}).get('clicked', 0),
         })
     ret = {
         'use_time_sec': round(time.time() - start, 3),
@@ -493,7 +505,7 @@ def save_csv_user(csv_users=None):
     if create_list:
         CsvUsers.objects.using(PRODUCT).bulk_create(create_list)
     if update_list:
-        CsvUsers.objects.using(PRODUCT).bulk_update(update_list, ['user_id','email'])
+        CsvUsers.objects.using(PRODUCT).bulk_update(update_list, ['user_id', 'email'])
 
 
 def query_all_csv_users():
@@ -556,9 +568,10 @@ def query_summary_by_id(uid):
 
 def query_manage_template(template_name=''):
     if template_name:
-        manage_template = SesTemplate.objects.using(PRODUCT_RO).filter(template_name=template_name)
+        manage_template = SesTemplate.objects.using(PRODUCT_RO).filter(
+            Q(template_name__icontains=template_name)).order_by('-last_update_ts')
     else:
-        manage_template = SesTemplate.objects.using(PRODUCT_RO).all()
+        manage_template = SesTemplate.objects.using(PRODUCT_RO).all().order_by('-last_update_ts')
     manage_template_list = []
     for u in manage_template:
         manage_template_list.append({
@@ -575,3 +588,11 @@ def query_manage_template(template_name=''):
     }
     return ret
 
+
+def create_html_file(request, html_name='html_file'):
+    html_file = request.FILES.get(html_name, None)
+    if html_file:
+        html_template = UploadFile(title=html_file.name, path=html_file)
+        html_template.save(request=request, using=PRODUCT)
+        return html_template
+    return None

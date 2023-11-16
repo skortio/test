@@ -521,18 +521,15 @@ def create_template(request):
             gm_name = request.user.get_username()
             template_type = request.POST.get('template_type', '')
             subject_part = request.POST.get('subject','')
-            html_part = request.FILES.get('html_part', None)
-            if html_part:
+            html_template = create_html_file(request,html_name='html_part')
+            if html_template:
                 create_ts = datetime.now()
-                send = SesTemplate(template_name=template_name,template_type=template_type,subject_part=subject_part,gm_name=gm_name,create_ts=create_ts,last_update_ts=create_ts)
+                send = SesTemplate(template_name=template_name,template_type=template_type,subject_part=subject_part,gm_name=gm_name,create_ts=create_ts,last_update_ts=create_ts,html_str=html_template.path)
                 send.save(using=PRODUCT)
                 # create_ses_template(template_name, subject_part, template_type, html_part)
             ret = query_manage_template(template_name)
-        else:
-            ret = query_manage_template()
-    else:
-        ret = query_manage_template()
-    return render(request, 'manage_template.html', ret)
+            return render(request, 'manage_template.html', ret)
+    return redirect('/manage_templates/')
 
 
 @login_required(login_url='/login/')
@@ -541,40 +538,21 @@ def search_template(request):
         template_name = request.POST.get('template_name', '')
         if template_name:
             ret = query_manage_template(template_name)
-        else:
-            ret = query_manage_template()
-    else:
-        ret = query_manage_template()
-    return render(request, 'manage_template.html', ret)
+            return render(request, 'manage_template.html', ret)
+    return redirect('/manage_templates/')
 
 
 @login_required(login_url='/login/')
 def show_html(request):
     if request.method == "POST":
         template_name = request.POST.get('template_name', '')
-        response = get_ses_template(template_name)
-        template_data = response['Template']
-
-        # 定义渲染模板所需的数据
-        context = {
-            'subject': template_data['SubjectPart'],
-            'html': template_data['HtmlPart'],
-        }
-
-        # 加载并渲染模板
-        jinja_template = Template("""
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <title>{{ subject }}</title>
-        </head>
-        <body>
-          {{ html }}
-        </body>
-        </html>
-        """)
-        rendered_html = jinja_template.render(context)
-        print(rendered_html)
+        if template_name:
+            send = SesTemplate.objects.using(PRODUCT_RO).filter(template_name=template_name).first()
+            if send:
+                print(send.html_str)
+                html_str = get_html_from_file(send.html_str)
+                return HttpResponse(html_str)
+    return redirect('/manage_templates/')
 
 
 @login_required(login_url='/login/')
@@ -593,21 +571,22 @@ def update_template(request):
             gm_name = request.user.get_username()
             template_type = request.POST.get('template_type', '')
             subject_part = request.POST.get('subject','')
-            html_part = request.FILES.get('html_part', None)
-            id = request.POST.get('id', 0)
-            if html_part:
-                last_update_time = datetime.now()
-                send = SesTemplate(id=id,template_name=template_name,template_type=template_type,subject_part=subject_part,gm_name=gm_name,last_update_ts=last_update_time)
-                send.save(using=PRODUCT)
-            # else:
-            #
-            #     update_ses_template(template_name, subject_part, template_type, html_part)
+            html_template = create_html_file(request, html_name='html_part')
+            tid = request.POST.get('id', 0)
+            db_template = SesTemplate.objects.using(PRODUCT).filter(id=tid).first()
+            if db_template:
+                if template_type:
+                    db_template.template_type = template_type
+                if subject_part:
+                    db_template.subject_part = subject_part
+                db_template.gm_name = gm_name
+                db_template.last_update_ts = datetime.now()
+                if html_template:
+                    db_template.html_str = html_template.path
+                db_template.save(using=PRODUCT)
             ret = query_manage_template(template_name)
-        else:
-            ret = query_manage_template()
-    else:
-        ret = query_manage_template()
-    return render(request, 'manage_template.html', ret)
+            return render(request, 'manage_template.html', ret)
+    return redirect('/manage_templates/')
 
 
 @login_required(login_url='/login/')
@@ -615,7 +594,5 @@ def delete_template(request):
     if request.method == "POST":
         template_name = request.POST.get('template_name', '')
         if template_name:
-            # delete_ses_template(template_name)
             SesTemplate.objects.using(PRODUCT).filter(template_name=template_name).delete()
-    ret = query_manage_template()
-    return render(request, 'manage_template.html', ret)
+    return redirect('/manage_templates/')
